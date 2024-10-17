@@ -71,8 +71,8 @@ class Camera:
         # get raw image
         im = self._picam2.capture_array()
 
-        #if self._rotation:
-        #    im = cv2.flip(im, -1)
+        if self._rotation:
+            im = cv2.flip(im, -1)
 
         #TODO: wrap this in a method
         #imRGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)  # convert from BGR to RGB image
