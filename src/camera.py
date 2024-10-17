@@ -47,13 +47,12 @@ class Camera:
         }
 
         #tensorflow variables
-        model = "efficientdet_lite0.tflite"
+        model = "/home/christian/Python/RoboCar_2.0/src/efficientdet_lite0.tflite"
         numThreads = 4
 
         baseOptions = core.BaseOptions(file_name=model, use_coral=False, num_threads=numThreads)
         detectionOptions = processor.DetectionOptions(max_results=3, score_threshold=0.5)
         options = vision.ObjectDetectorOptions(base_options=baseOptions, detection_options=detectionOptions)
-        print(options.model_file)
         self._detector = vision.ObjectDetector.create_from_options(options)
 
     def setup(self):
