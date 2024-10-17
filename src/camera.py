@@ -47,7 +47,7 @@ class Camera:
         }
 
         #tensorflow variables
-        model = "/home/christian/Python/RoboCar_2.0/src/efficientdet_lite0.tflite"
+        model = "/home/christian/Python/RoboCar_2.0/src/efficientdet_lite0.tflite" #needs to be full path #TODO: move to config file
         numThreads = 4
 
         baseOptions = core.BaseOptions(file_name=model, use_coral=False, num_threads=numThreads)
@@ -71,14 +71,14 @@ class Camera:
         # get raw image
         im = self._picam2.capture_array()
 
-        if self._rotation:
-            im = cv2.flip(im, -1)
+        #if self._rotation:
+        #    im = cv2.flip(im, -1)
 
         #TODO: wrap this in a method
-        imRGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)  # convert from BGR to RGB image
-        imTensor = vision.TensorImage.create_from_array(imRGB)  # create a tensor image
-        myDetections = self._detector.detect(imTensor)  # get the objects that are detexted by tensorflow
-        image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
+        #imRGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)  # convert from BGR to RGB image
+        #imTensor = vision.TensorImage.create_from_array(imRGB)  # create a tensor image
+        #myDetections = self._detector.detect(imTensor)  # get the objects that are detexted by tensorflow
+        #image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
         # read control values from external classes
         self._read_control_values_for_video_feed(shared_array)
