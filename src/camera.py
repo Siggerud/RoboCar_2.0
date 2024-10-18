@@ -78,7 +78,7 @@ class Camera:
         imRGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)  # convert from BGR to RGB image
         imTensor = vision.TensorImage.create_from_array(imRGB)  # create a tensor image
         print("a")
-        myDetections = self._detector.detect(imTensor)  # get the objects that are detexted by tensorflow
+        myDetections = self._detector.detect(imTensor)  # get the objects that are detected by tensorflow
         print("b")
         #image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
