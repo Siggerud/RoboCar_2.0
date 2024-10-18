@@ -56,16 +56,6 @@ class Camera:
         self._detector = vision.ObjectDetector.create_from_options(options)
 
     def setup(self):
-        """
-        self._picam2 = Picamera2()
-
-        # set resolution, format and rotation of camera feed
-        config = self._picam2.create_preview_configuration(
-            {"size": (self._dispW, self._dispH), "format": "RGB888"}
-        )
-        self._picam2.configure(config)
-        self._picam2.start()
-        """
         self._picam2 = Picamera2()
         self._picam2.preview_configuration.main.size = (self._dispW, self._dispH)
         self._picam2.preview_configuration.main.format = 'RGB888'
@@ -85,9 +75,9 @@ class Camera:
         #TODO: wrap this in a method
         imRGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)  # convert from BGR to RGB image
         imTensor = vision.TensorImage.create_from_array(imRGB)  # create a tensor image
-        print("a")
+
+        # This is the line that the code gets stuck on
         myDetections = self._detector.detect(imTensor)  # get the objects that are detected by tensorflow
-        print("b")
         #image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
         # read control values from external classes
