@@ -54,6 +54,7 @@ class CarControl:
 
         self._activate_car_handling()
 
+    #TODO: use this method
     def cleanup(self):
         # close all threads
         for process in self._processes:
