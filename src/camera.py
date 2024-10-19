@@ -81,7 +81,7 @@ class Camera:
         #image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
         # read control values from external classes
-        self._read_control_values_for_video_feed(shared_array)
+        #self._read_control_values_for_video_feed(shared_array)
 
         # resize image when zooming
         if self._zoomValue != 1.0:
