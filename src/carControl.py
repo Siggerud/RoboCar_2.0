@@ -44,6 +44,7 @@ class CarControl:
             self._servoEnabled = True
 
     def start(self):
+        print(self._camera)
         if self._camera:
             self._get_camera_ready() # this needs to be first method called
 
