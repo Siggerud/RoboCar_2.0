@@ -170,21 +170,30 @@ except KeyboardInterrupt:
 finally:
     print("finished!")"""
 
+from cameraHelper import CameraHelper
+from carControl import CarControl
 from camera import Camera
-from multiprocessing import Array
 
-array = Array('d', 1)
+camera = Camera((300, 300))
+carController = CarControl()
+cameraHelper = CameraHelper()
 
-cam = Camera((300, 300))
-cam.setup()
+carController.add_camera(camera)
+carController.add_camera_helper(cameraHelper)
 
+carController.start()
+
+flag = carController.shared_flag
+from time import sleep
 try:
-    while True:
-        cam.show_camera_feed(array)
-
+    while not flag.value:  # listen for any processes setting the event
+        sleep(0.5)
 except KeyboardInterrupt:
-    cam.cleanup()
-    print("bye")
+    flag.value = True
+    camera.cleanup()
+except Exception:
+    flag.value = True
+    camera.cleanup()
 
 
 
