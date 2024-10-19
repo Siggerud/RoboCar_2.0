@@ -44,7 +44,6 @@ class CarControl:
             self._servoEnabled = True
 
     def start(self):
-        print(self._camera)
         if self._camera:
             self._get_camera_ready() # this needs to be first method called
 
@@ -53,7 +52,7 @@ class CarControl:
         if self._arduinoCommunicator:
             self._activate_arduino_communication()
 
-        self._activate_car_handling()
+        #self._activate_car_handling()
 
     #TODO: use this method
     def cleanup(self):
