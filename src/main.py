@@ -1,4 +1,4 @@
-"""from carHandling import CarHandling
+from carHandling import CarHandling
 from arduinoCommunicator import ArduinoCommunicator, InvalidPortError
 from camera import Camera
 from cameraHelper import CameraHelper
@@ -168,7 +168,9 @@ try:
 except KeyboardInterrupt:
     flag.value = True # set event to stop all active processes
 finally:
-    print("finished!")"""
+    print("finished!")
+    
+"""
 
 from multiprocessing import Process, Array
 from camera import Camera
@@ -188,7 +190,7 @@ def start_camera(cam):
 process = Process(target=start_camera, args=(camera,))
 process.start()
 
-
+"""
 
 
 
