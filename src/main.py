@@ -173,7 +173,7 @@ finally:
 from camera import Camera
 from multiprocessing import Array
 
-array = Array()
+array = Array('d', 1)
 
 cam = Camera((300, 300))
 cam.setup()
