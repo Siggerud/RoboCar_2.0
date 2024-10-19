@@ -77,19 +77,21 @@ class Camera:
         imTensor = vision.TensorImage.create_from_array(imRGB)  # create a tensor image
 
         # This is the line that the code gets stuck on
+        print("a")
         myDetections = self._detector.detect(imTensor)  # get the objects that are detected by tensorflow
+        print("b")
         image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
         # read control values from external classes
-        #self._read_control_values_for_video_feed(shared_array)
+        self._read_control_values_for_video_feed(shared_array)
 
         # resize image when zooming
         if self._zoomValue != 1.0:
             im = self._get_zoomed_image(im)
 
         # add control values to cam feed
-        #if self._hudActive:
-        #    self._add_text_to_cam_feed(im)
+        if self._hudActive:
+            self._add_text_to_cam_feed(im)
 
         cv2.imshow("Camera", im)
         cv2.waitKey(1)
