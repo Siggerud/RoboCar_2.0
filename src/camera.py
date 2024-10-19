@@ -78,7 +78,7 @@ class Camera:
 
         # This is the line that the code gets stuck on
         myDetections = self._detector.detect(imTensor)  # get the objects that are detected by tensorflow
-        #image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
+        image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
         # read control values from external classes
         #self._read_control_values_for_video_feed(shared_array)
