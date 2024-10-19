@@ -181,10 +181,14 @@ def start_camera(cam):
     array = Array('d', 1)
     tStart = time()
     while (time() - tStart) < 30:
-        cam.show_camera_feed()
+        cam.show_camera_feed(array)
+
+    cam.cleanup()
 
 process = Process(target=start_camera, args=(camera,))
 process.start()
+
+
 
 
 
