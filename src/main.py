@@ -172,7 +172,7 @@ def run_camera(array, flag):
     camera.cleanup()
 
 array = Array('d', 1)
-
+# start camera process
 process = Process(target=run_camera, args=(array, flag))
 process.start()
 
