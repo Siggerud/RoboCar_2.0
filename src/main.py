@@ -157,7 +157,7 @@ if camera:
     carController.add_camera_helper(cameraHelper)
 
 # start car
-carController.start()
+#carController.start()
 
 flag = carController.shared_flag
 
