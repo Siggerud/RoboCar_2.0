@@ -161,10 +161,22 @@ carController.start()
 
 flag = carController.shared_flag
 
-from multiprocessing import Array
+from multiprocessing import Array, Process
+
+def run_camera(array, flag):
+    camera.setup()
+
+    while not flag.value:
+        camera.show_camera_feed(array)
+
+    camera.cleanup()
 
 array = Array('d', 1)
 
+process = Process(target=run_camera, args=(array, flag))
+process.start()
+
+"""
 # keep process running until keyboard interrupt
 try:
     camera.setup()
@@ -175,6 +187,7 @@ except KeyboardInterrupt:
 finally:
     camera.cleanup()
     print("finished!")
+"""
 
 
 
