@@ -81,7 +81,7 @@ class Camera:
         print("a")
         myDetections = self._detector.detect(imTensor)  # get the objects that are detected by tensorflow
         print("b")
-        #image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
+        image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
         # read control values from external classes
         self._read_control_values_for_video_feed(shared_array)
