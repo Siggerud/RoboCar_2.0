@@ -26,6 +26,8 @@ class CarControl:
         self.shared_array = None
         self.shared_flag = Value('b', False)
 
+        self.array_dict = None
+
     def add_arduino_communicator(self, arduinoCommunicator):
         self._arduinoCommunicator = arduinoCommunicator
 
@@ -99,7 +101,8 @@ class CarControl:
 
         self.shared_array = Array('d', arrayInput)
 
-        self._camera.add_array_dict(arrayDict)
+        self.array_dict = arrayDict
+        #self._camera.add_array_dict(arrayDict)
         self._cameraHelper.add_array_dict(arrayDict)
 
 

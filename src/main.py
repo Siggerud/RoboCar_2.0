@@ -163,6 +163,7 @@ carController.start()
 flag = carController.shared_flag
 shared_array = carController.shared_array
 
+camera._array_dict = carController.array_dict
 camera.setup()
 
 # keep process running until keyboard interrupt
