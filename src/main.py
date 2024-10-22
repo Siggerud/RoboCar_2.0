@@ -172,6 +172,7 @@ shared_array_dict = carController.shared_array_dict
 
 camera.add_array_dict(shared_array_dict)
 
+camera.setup()
 while not flag.value:  # listen for any processes setting the event
     camera.show_camera_feed(shared_array)
 camera.cleanup()
