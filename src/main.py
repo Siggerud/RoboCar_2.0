@@ -6,7 +6,6 @@ from servoHandling import ServoHandling
 from carControl import CarControl, X11ForwardingError
 from xboxControl import NoControllerDetected
 from roboCarHelper import print_startup_error, convert_from_board_number_to_bcm_number
-from time import sleep
 from configparser import ConfigParser
 import os
 from tflite_support.task import core
@@ -139,17 +138,6 @@ servoVertical = setup_servo(parser, "vertical")
 # setup camera
 camera = setup_camera(parser)
 
-#tensorflow variables
-model = "/home/christian/Python/RoboCar_2.0/src/efficientdet_lite0.tflite" #needs to be full path #TODO: move to config file
-numThreads = 4
-
-baseOptions = core.BaseOptions(file_name=model, use_coral=False, num_threads=numThreads)
-detectionOptions = processor.DetectionOptions(max_results=3, score_threshold=0.5)
-options = vision.ObjectDetectorOptions(base_options=baseOptions, detection_options=detectionOptions)
-detector = vision.ObjectDetector.create_from_options(options)
-
-camera.detector = detector
-
 # add components
 if car:
     carController.add_car(car)
@@ -167,21 +155,26 @@ if camera:
     cameraHelper.add_car(car)
     cameraHelper.add_servo(servoHorizontal)
 
-    carController.add_camera(camera)
+    #carController.add_camera(camera)
     carController.add_camera_helper(cameraHelper)
+
 
 # start car
 carController.start()
 
 flag = carController.shared_flag
+shared_array = carController.shared_array
+
+camera.setup()
 
 # keep process running until keyboard interrupt
 try:
     while not flag.value:  # listen for any processes setting the event
-        sleep(0.5)
+        camera.show_camera_feed(shared_array)
 except KeyboardInterrupt:
     flag.value = True # set event to stop all active processes
 finally:
+    camera.cleanup()
     print("finished!")
 
 

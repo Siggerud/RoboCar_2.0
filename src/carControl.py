@@ -44,10 +44,13 @@ class CarControl:
             self._servoEnabled = True
 
     def start(self):
+        """
         if self._camera:
             self._get_camera_ready() # this needs to be first method called
 
             self._activate_camera()
+        """
+        self._set_shared_array_and_array_dict()
 
         if self._arduinoCommunicator:
             self._activate_arduino_communication()
