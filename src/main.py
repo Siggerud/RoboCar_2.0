@@ -9,6 +9,9 @@ from roboCarHelper import print_startup_error, convert_from_board_number_to_bcm_
 from time import sleep
 from configparser import ConfigParser
 import os
+from tflite_support.task import core
+from tflite_support.task import processor
+from tflite_support.task import vision
 
 def setup_camera(parser):
     if not parser["Components.enabled"].getboolean("Camera"):
@@ -135,6 +138,17 @@ servoVertical = setup_servo(parser, "vertical")
 
 # setup camera
 camera = setup_camera(parser)
+
+#tensorflow variables
+model = "/home/christian/Python/RoboCar_2.0/src/efficientdet_lite0.tflite" #needs to be full path #TODO: move to config file
+numThreads = 4
+
+baseOptions = core.BaseOptions(file_name=model, use_coral=False, num_threads=numThreads)
+detectionOptions = processor.DetectionOptions(max_results=3, score_threshold=0.5)
+options = vision.ObjectDetectorOptions(base_options=baseOptions, detection_options=detectionOptions)
+detector = vision.ObjectDetector.create_from_options(options)
+
+camera.detector = detector
 
 # add components
 if car:

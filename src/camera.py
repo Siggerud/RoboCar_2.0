@@ -3,9 +3,8 @@ import os
 os.environ["LIBCAMERA_LOG_LEVELS"] = "3" #disable info and warning logging
 from picamera2 import Picamera2
 from time import time
-from tflite_support.task import core
-from tflite_support.task import processor
 from tflite_support.task import vision
+
 import utils
 
 class Camera:
@@ -46,14 +45,7 @@ class Camera:
             2: "Right"
         }
 
-        #tensorflow variables
-        model = "/home/christian/Python/RoboCar_2.0/src/efficientdet_lite0.tflite" #needs to be full path #TODO: move to config file
-        numThreads = 4
-
-        baseOptions = core.BaseOptions(file_name=model, use_coral=False, num_threads=numThreads)
-        detectionOptions = processor.DetectionOptions(max_results=3, score_threshold=0.5)
-        options = vision.ObjectDetectorOptions(base_options=baseOptions, detection_options=detectionOptions)
-        self._detector = vision.ObjectDetector.create_from_options(options)
+        self.detector = None
 
     def setup(self):
         self._picam2 = Picamera2()
@@ -77,7 +69,9 @@ class Camera:
         imTensor = vision.TensorImage.create_from_array(imRGB)  # create a tensor image
 
         # This is the line that the code gets stuck on
-        myDetections = self._detector.detect(imTensor)  # get the objects that are detected by tensorflow
+        print("a")
+        myDetections = self.detector.detect(imTensor)  # get the objects that are detected by tensorflow
+        print("b")
         #image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
         # read control values from external classes
