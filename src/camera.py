@@ -78,9 +78,7 @@ class Camera:
         imTensor = vision.TensorImage.create_from_array(imRGB)  # create a tensor image
 
         # This is the line that the code gets stuck on
-        print("a")
         myDetections = self._detector.detect(imTensor)  # get the objects that are detected by tensorflow
-        print("b")
         image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
         # read control values from external classes
