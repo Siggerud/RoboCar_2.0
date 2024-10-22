@@ -2,11 +2,11 @@ import cv2
 import os
 os.environ["LIBCAMERA_LOG_LEVELS"] = "3" #disable info and warning logging
 from picamera2 import Picamera2
-from time import time
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
 import utils
+from time import time
 
 class Camera:
     def __init__(self, resolution, rotation=True):
@@ -46,21 +46,18 @@ class Camera:
             2: "Right"
         }
 
-        #tensorflow variables
-        model = "/home/christian/Python/RoboCar_2.0/src/efficientdet_lite0.tflite" #needs to be full path #TODO: move to config file
-        numThreads = 4
-
-        baseOptions = core.BaseOptions(file_name=model, use_coral=False, num_threads=numThreads)
-        detectionOptions = processor.DetectionOptions(max_results=3, score_threshold=0.5)
-        options = vision.ObjectDetectorOptions(base_options=baseOptions, detection_options=detectionOptions)
-        self._detector = vision.ObjectDetector.create_from_options(options)
+        self._tfliteModel = "efficientdet_lite0.tflite" # tensorflow trained model
+        self._numThreads = 4
+        self._detector = self._get_detector()
 
     def setup(self):
         self._picam2 = Picamera2()
-        self._picam2.preview_configuration.main.size = (self._dispW, self._dispH)
-        self._picam2.preview_configuration.main.format = 'RGB888'
-        self._picam2.preview_configuration.align()
-        self._picam2.configure("preview")
+
+        # set resolution, format and rotation of camera feed
+        config = self._picam2.create_preview_configuration(
+            {"size": (self._dispW, self._dispH), "format": "RGB888"}
+        )
+        self._picam2.configure(config)
         self._picam2.start()
 
     def show_camera_feed(self, shared_array):
@@ -69,16 +66,15 @@ class Camera:
         # get raw image
         im = self._picam2.capture_array()
 
+        # flip image if specified by user
         if self._rotation:
             im = cv2.flip(im, -1)
 
-        #TODO: wrap this in a method
+        # convert image array to tflite friendly format and start object detection
         imRGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)  # convert from BGR to RGB image
         imTensor = vision.TensorImage.create_from_array(imRGB)  # create a tensor image
-
-        # This is the line that the code gets stuck on
         myDetections = self._detector.detect(imTensor)  # get the objects that are detected by tensorflow
-        #image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
+        image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
 
         # read control values from external classes
         self._read_control_values_for_video_feed(shared_array)
@@ -109,6 +105,13 @@ class Camera:
 
     def add_array_dict(self, arrayDict):
         self._arrayDict = arrayDict
+
+    def _get_detector(self):
+        baseOptions = core.BaseOptions(file_name=self._tfliteModel, use_coral=False, num_threads=self._numThreads)
+        detectionOptions = processor.DetectionOptions(max_results=3, score_threshold=0.5)
+        options = vision.ObjectDetectorOptions(base_options=baseOptions, detection_options=detectionOptions)
+
+        return vision.ObjectDetector.create_from_options(options)
 
     def _set_text_positions(self):
         spacingVertical = 30

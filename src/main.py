@@ -152,23 +152,30 @@ if camera:
     cameraHelper = CameraHelper()
     cameraHelper.add_car(car)
     cameraHelper.add_servo(servoHorizontal)
-
-    carController.add_camera(camera)
     carController.add_camera_helper(cameraHelper)
+
+    carController.enable_camera()
+
 
 # start car
 carController.start()
 
-flag = carController.shared_flag
+#TODO: put all camera code in a method
+if car:
+    camera.set_car_enabled()
+if servoHorizontal:
+    camera.set_servo_enabled()
 
-# keep process running until keyboard interrupt
-try:
-    while not flag.value:  # listen for any processes setting the event
-        sleep(0.5)
-except KeyboardInterrupt:
-    flag.value = True # set event to stop all active processes
-finally:
-    print("finished!")
+flag = carController.shared_flag
+shared_array = carController.shared_array
+shared_array_dict = carController.shared_array_dict
+
+camera.add_array_dict(shared_array_dict)
+
+while not flag.value:  # listen for any processes setting the event
+    camera.show_camera_feed(shared_array)
+camera.cleanup()
+
 
 
 

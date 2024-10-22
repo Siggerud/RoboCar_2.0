@@ -15,7 +15,7 @@ class CarControl:
         self._servos = []
         self._arduinoCommunicator = None
 
-        self._camera = None
+        self._cameraEnabled = False
         self._cameraHelper = None
 
         self._processes = []
@@ -24,6 +24,7 @@ class CarControl:
         }
 
         self.shared_array = None
+        self.shared_array_dict = None
         self.shared_flag = Value('b', False)
 
     def add_arduino_communicator(self, arduinoCommunicator):
@@ -32,8 +33,8 @@ class CarControl:
     def add_car(self, car):
         self._car = car
 
-    def add_camera(self, camera):
-        self._camera = camera
+    def enable_camera(self):
+        self._cameraEnabled = True
 
     def add_camera_helper(self, cameraHelper):
         self._cameraHelper = cameraHelper
@@ -44,30 +45,21 @@ class CarControl:
             self._servoEnabled = True
 
     def start(self):
-        if self._camera:
-            self._get_camera_ready() # this needs to be first method called
+        if self._cameraEnabled:
+            self._set_shared_array_and_array_dict() # this needs to be first method called
 
-            self._activate_camera()
+            self._cameraHelper.add_array_dict(self.shared_array_dict)
+            #self._activate_camera()
 
         if self._arduinoCommunicator:
             self._activate_arduino_communication()
 
         self._activate_car_handling()
 
-    #TODO: use this method
     def cleanup(self):
         # close all threads
         for process in self._processes:
             process.join()
-
-    def _get_camera_ready(self):
-        self._set_shared_array_and_array_dict()
-
-        if self._car:
-            self._camera.set_car_enabled()
-
-        if self._servoEnabled:
-            self._camera.set_servo_enabled()
 
     def _set_shared_array_and_array_dict(self):
         arrayInput = []
@@ -95,10 +87,7 @@ class CarControl:
         arrayInput.append(1.0)
 
         self.shared_array = Array('d', arrayInput)
-
-        self._camera.add_array_dict(arrayDict)
-        self._cameraHelper.add_array_dict(arrayDict)
-
+        self.shared_array_dict = arrayDict
 
     def _activate_camera(self):
         process = Process(target=self._start_camera, args=(self.shared_array, self.shared_flag))
