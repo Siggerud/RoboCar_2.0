@@ -177,7 +177,7 @@ class CarControl:
             for servo in self._servos:
                 print("Turn servo" + servo.get_plane() + ": " + servo.get_servo_buttons()["Servo"])
             print()
-        if self._camera:
+        if self._cameraEnabled:
             print("Camera controls")
             print("Zoom camera: " + self._cameraHelper.get_camera_buttons()["Zoom"])
             print("Turn HUD on or off: " + self._cameraHelper.get_camera_buttons()["HUD"])
