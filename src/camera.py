@@ -46,7 +46,8 @@ class Camera:
             2: "Right"
         }
 
-        self._tfliteModel = "efficientdet_lite0.tflite" # tensorflow trained model
+        #TODO: add model to config file
+        self._tfliteModel = "/home/christian/Python/RoboCar_2.0/src/efficientdet_lite0.tflite" # tensorflow trained model
         self._numThreads = 4
         self._detector = self._get_detector()
 
