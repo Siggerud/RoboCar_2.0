@@ -3,6 +3,8 @@ import os
 os.environ["LIBCAMERA_LOG_LEVELS"] = "3" #disable info and warning logging
 from picamera2 import Picamera2
 from time import time
+from tflite_support.task import core
+from tflite_support.task import processor
 from tflite_support.task import vision
 
 import utils

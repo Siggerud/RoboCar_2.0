@@ -8,9 +8,7 @@ from xboxControl import NoControllerDetected
 from roboCarHelper import print_startup_error, convert_from_board_number_to_bcm_number
 from configparser import ConfigParser
 import os
-from tflite_support.task import core
-from tflite_support.task import processor
-from tflite_support.task import vision
+
 
 def setup_camera(parser):
     if not parser["Components.enabled"].getboolean("Camera"):
