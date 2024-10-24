@@ -80,6 +80,9 @@ class ServoHandling:
         if directionChanged:
             self._oneDegreeInPwm = -1 * self._oneDegreeInPwm
 
+    def get_plane(self):
+        return self._plane
+
     """
     def handle_xbox_input(self, button, pressValue):
         if button == self._moveServoButton:
@@ -89,8 +92,7 @@ class ServoHandling:
     def get_servo_buttons(self):
         return self._controlsDictServo
 
-    def get_plane(self):
-        return self._plane
+    
 
     def get_current_servo_angle(self):
         current_servo_angle = int(map_value_to_new_scale(
