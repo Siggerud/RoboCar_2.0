@@ -48,6 +48,7 @@ class CameraHelper:
     def add_servo(self, servo):
         self._servo = servo
 
+    """
     def update_control_values_for_video_feed(self, shared_array):
         if self._servo:
             shared_array[self._arrayDict["servo"]] = self._servo.get_current_servo_angle()
@@ -58,7 +59,7 @@ class CameraHelper:
 
         shared_array[self._arrayDict["HUD"]] = float(self._hudActive)
         shared_array[self._arrayDict["Zoom"]] = self._zoomValue
-
+    """
     def get_camera_buttons(self):
         return self._controlsDictCamera
 

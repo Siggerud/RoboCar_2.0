@@ -45,14 +45,17 @@ class CarControl:
             self._servoEnabled = True
 
     def start(self):
+        """
         if self._cameraEnabled:
             self._set_shared_array_and_array_dict() # this needs to be first method called
 
             self._cameraHelper.add_array_dict(self.shared_array_dict)
-            #self._activate_camera()
-
+            self._activate_camera()
+        """
         if self._arduinoCommunicator:
             self._activate_arduino_communication()
+
+        self._activate_object_detection()
 
         self._activate_car_handling()
 
@@ -61,6 +64,7 @@ class CarControl:
         for process in self._processes:
             process.join()
 
+    """
     def _set_shared_array_and_array_dict(self):
         arrayInput = []
         arrayDict = {}
@@ -89,8 +93,14 @@ class CarControl:
         self.shared_array = Array('d', arrayInput)
         self.shared_array_dict = arrayDict
 
+    
     def _activate_camera(self):
         process = Process(target=self._start_camera, args=(self.shared_array, self.shared_flag))
+        self._processes.append(process)
+        process.start()
+    """
+    def _activate_object_detection(self):
+        process = Process(target=self._start_object_detection, args=(self.shared_array, self.shared_flag))
         self._processes.append(process)
         process.start()
 
@@ -104,17 +114,33 @@ class CarControl:
         self._processes.append(process)
         process.start()
 
+    def _start_object_detection(self, shared_array, flag):
+        for servo in self._servos:
+            servo.setup()
+            #TODO: these need to be class variables
+            if servo.get_plane() == "horizontal":
+                horizontalServo = servo
+            elif servo.get_plance() == "vertical":
+                verticalServo = servo
+
+        while not flag.value:
+            horizontalServo.scan()
+
+        for servo in self._servos:
+            servo.cleanup()
+
+
     def _start_listening_for_xbox_commands(self, shared_array, flag):
         self._print_button_explanation()
         self._map_all_objects_to_buttons()
 
         if self._car:
             self._car.setup()
-
+        """
         if self._servoEnabled:
             for servo in self._servos:
                 servo.setup()
-
+        """
         while not flag.value:
             for event in self._xboxControl.get_controller_events():
                 button, pressValue = self._xboxControl.get_button_and_press_value_from_event(event)
@@ -127,21 +153,22 @@ class CarControl:
                     self._buttonToObjectDict[button].handle_xbox_input(button, pressValue)
                 except KeyError: # if key does not correspond to object, then go to next event
                     continue
-
+                """
                 if self._cameraHelper:
                     self._cameraHelper.update_control_values_for_video_feed(shared_array)
-
+                """
         if self._car:
             self._car.cleanup()
-
+        """
         if self._servoEnabled:
             for servo in self._servos:
                 servo.cleanup()
-
+        """
         self._xboxControl.cleanup()
 
         print("Exiting car handling")
 
+    """
     def _start_camera(self, shared_array, flag):
         self._camera.setup()
 
@@ -149,7 +176,7 @@ class CarControl:
             self._camera.show_camera_feed(shared_array)
 
         self._camera.cleanup()
-
+    """
     def _start_listening_for_arduino_communication(self, flag):
         self._arduinoCommunicator.setup()
 
@@ -172,11 +199,13 @@ class CarControl:
             print("Drive forward: " + self._car.get_car_buttons()["Gas"])
             print("Reverse: " + self._car.get_car_buttons()["Reverse"])
             print()
+        """
         if self._servoEnabled:
             print("Servo controls:")
             for servo in self._servos:
                 print("Turn servo" + servo.get_plane() + ": " + servo.get_servo_buttons()["Servo"])
             print()
+        """
         if self._cameraEnabled:
             print("Camera controls")
             print("Zoom camera: " + self._cameraHelper.get_camera_buttons()["Zoom"])
@@ -188,11 +217,11 @@ class CarControl:
     def _map_all_objects_to_buttons(self):
         if self._car:
             self._add_object_to_buttons(self._car.get_car_buttons(), self._car)
-
+        """
         if self._servoEnabled:
             for servo in self._servos:
                 self._add_object_to_buttons(servo.get_servo_buttons(), servo)
-
+        """
         if self._cameraHelper:
             self._add_object_to_buttons(self._cameraHelper.get_camera_buttons(), self._cameraHelper)
 

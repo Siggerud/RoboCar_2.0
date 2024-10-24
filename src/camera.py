@@ -76,18 +76,18 @@ class Camera:
         imTensor = vision.TensorImage.create_from_array(imRGB)  # create a tensor image
         myDetections = self._detector.detect(imTensor)  # get the objects that are detected by tensorflow
         image = utils.visualize(im, myDetections)  # create a decorated image with detected objects
-
+        """
         # read control values from external classes
         self._read_control_values_for_video_feed(shared_array)
-
+        """
         # resize image when zooming
         if self._zoomValue != 1.0:
             im = self._get_zoomed_image(im)
-
+        """
         # add control values to cam feed
         if self._hudActive:
             self._add_text_to_cam_feed(im)
-
+        """
         cv2.imshow("Camera", im)
         cv2.waitKey(1)
 
@@ -174,6 +174,7 @@ class Camera:
     def _get_fps(self):
         return str(int(self._fps)) + " FPS"
 
+    """
     def _read_control_values_for_video_feed(self, shared_array):
         if self._carEnabled:
             self._speedText = "Speed: " + str(int(shared_array[self._arrayDict["speed"]])) + "%"
@@ -183,7 +184,7 @@ class Camera:
 
         self._hudActive = shared_array[self._arrayDict["HUD"]]
         self._zoomValue = shared_array[self._arrayDict["Zoom"]]
-
+    """
     def _get_turn_value(self, number):
         return self._number_to_turnValue[number]
 
