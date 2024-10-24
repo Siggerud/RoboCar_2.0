@@ -34,12 +34,10 @@ class ServoHandling:
             - 90,
             90
         )
-        print(self._pwmMinServo)
-        print(self._pwmMaxServo)
-        self._oneDegreeInPwm: float = (self._pwmMinServo - self._servoPwmNeutralValue) / 90
+        self._oneDegreeInPwm: float = (self._pwmMinServo - self._servoPwmNeutralValue) / 60
         self._currentPwmValue: float = self._servoPwmNeutralValue
         self._lastMoveTime: float = time()
-        self._oneDegreeMoveTime = 3 / 90 # should take 3 seconds to move 90 degrees
+        self._oneDegreeMoveTime = 3 / 60 # should take 3 seconds to move 60 degrees
         self._direction = "left"
 
         """
@@ -59,7 +57,6 @@ class ServoHandling:
             self._set_direction()
 
             newPwmValue: float = self._currentPwmValue + self._oneDegreeInPwm
-            print(newPwmValue)
             ServoHandling.pigpioPwm.set_servo_pulsewidth(self._servoPin, newPwmValue)
             self._currentPwmValue = newPwmValue
             self._lastMoveTime = time()
@@ -71,8 +68,7 @@ class ServoHandling:
                 self._direction = "right"
                 directionChanged = True
         if self._direction == "right":
-            print(self._currentPwmValue)
-            if (self._currentPwmValue - self._oneDegreeInPwm) < self._pwmMaxServo:
+            if (self._currentPwmValue + self._oneDegreeInPwm) < self._pwmMaxServo:
                 self._direction = "left"
                 directionChanged = True
 
