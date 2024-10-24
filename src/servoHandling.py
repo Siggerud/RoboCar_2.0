@@ -34,7 +34,8 @@ class ServoHandling:
             - 90,
             90
         )
-
+        print(self._pwmMinServo)
+        print(self._pwmMaxServo)
         self._oneDegreeInPwm: float = (self._pwmMinServo - self._servoPwmNeutralValue) / 90
         self._currentPwmValue: float = self._servoPwmNeutralValue
         self._lastMoveTime: float = time()
