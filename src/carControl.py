@@ -120,7 +120,7 @@ class CarControl:
             #TODO: these need to be class variables
             if servo.get_plane() == "horizontal":
                 horizontalServo = servo
-            elif servo.get_plance() == "vertical":
+            elif servo.get_plane() == "vertical":
                 verticalServo = servo
 
         while not flag.value:
