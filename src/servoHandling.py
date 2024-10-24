@@ -69,12 +69,11 @@ class ServoHandling:
         if self._direction == "left":
             if (self._currentPwmValue + self._oneDegreeInPwm) > self._pwmMinServo:
                 self._direction = "right"
-                print("changed to right")
                 directionChanged = True
         if self._direction == "right":
+            print(self._currentPwmValue)
             if (self._currentPwmValue - self._oneDegreeInPwm) < self._pwmMaxServo:
                 self._direction = "left"
-                print("changed to left")
                 directionChanged = True
 
         # if direction has changed we just change the sign value of the pwm increment
