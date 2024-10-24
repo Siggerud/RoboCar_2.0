@@ -59,9 +59,9 @@ class ServoHandling:
             self._set_direction()
 
             newPwmValue: float = self._currentPwmValue + self._oneDegreeInPwm
+            print(newPwmValue)
             ServoHandling.pigpioPwm.set_servo_pulsewidth(self._servoPin, newPwmValue)
             self._currentPwmValue = newPwmValue
-            print(self._currentPwmValue)
             self._lastMoveTime = time()
 
     def _set_direction(self):
